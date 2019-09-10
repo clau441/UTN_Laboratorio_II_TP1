@@ -429,6 +429,7 @@ void mostrarAsigM(tAsignacion alta)
     }
 }
 
+
 void leerAlumAsig(char alumno[50])
 {
     tAsignacion alta;
