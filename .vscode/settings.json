@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "cstdlib": "cpp",
+        "istream": "cpp",
+        "__locale": "cpp",
+        "iostream": "cpp",
+        "terminal.external.osxExec": "iTerm.app"
+    }
+}

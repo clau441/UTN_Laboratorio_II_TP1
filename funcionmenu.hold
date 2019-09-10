@@ -1,0 +1,107 @@
+#include <iostream>
+// #include <cstdio>
+#include "funciones.h"
+
+using namespace std;
+
+void menuMaterias()
+{
+
+    bool salir = false;
+
+    int op;
+
+    while (!salir)
+    {
+        cout << "||--------------------------------||"<< endl;
+        cout << "|| 1 - Alta de materias           ||"<< endl;
+        cout << "|| 2 - Listar Materias            ||"<< endl;
+        cout << "|| 3 - Alta Alumnos               ||"<< endl;
+        cout << "|| 4 - Listar Alumnos             ||"<< endl;
+        cout << "|| 5 - Asignar Alumnos - Materias ||"<< endl;
+        cout << "|| 6 - Mostar Alumnos - Materias  ||"<< endl;
+        cout << "|| 7 - Modificar datos del alumno ||"<< endl;
+        cout << "|| 8 - Dar de baja un alumno      ||"<< endl;
+        cout << "|| 0 - Salir                      ||"<< endl;
+        cout << "||------------------------------  ||"<< endl;
+        cout << " Ingrese la opcion" << endl;
+        cin >> op;
+        cin.ignore();
+        //system("clr)";
+
+        switch(op)
+        {
+        case 1:
+            {
+                tMateria mat; 
+                mat.id_materia=obtenerIDM();
+                altaMateria(&mat);
+                if(guardarMateria(mat))
+                    {
+                        cout <<"La materia se guardo correctamente" << endl;
+                    }
+                else
+                    {
+
+                        cout <<"La mataria no se pudo guardar" << endl;
+                    }
+                cin.ignore();
+            }
+            break;
+        
+        case 2:
+            {
+                leerMaterias();
+                cin.ignore(); 
+            }
+       
+            break;
+
+        case 3:
+            {
+                tAlumno alum;
+                alum.legajo=obtenerIDA();
+                altaAlumno(&alum);
+                if(guardarAlumno(alum))
+                {
+                    cout << " Se cargo el alumno correctamente ";
+                }
+                else
+                {
+                    cout << " El alumno no pudo ser cargado";
+                }
+                cin.ignore();
+            }
+            break;
+        case 4:
+            {
+                leerAlumno();
+                cin.ignore();
+            }
+            break;
+
+        case 5:
+            {
+                altaAsigMat();
+            }
+            break;
+
+        case 6:
+            {
+                leerAsigMat();
+            }    
+            break;
+        case 0:
+            {
+                salir=true; 
+            }
+            
+            break;   
+        default:
+            {
+                cout << "Opcion No valida!! ingrese la opcion correcta. ";
+            }
+            break;
+        }
+    }
+}
