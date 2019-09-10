@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdio>
 #include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 using namespace std;
 
@@ -269,8 +271,12 @@ void altaAsigMat()
 
 void mostarAsigMat(tAsignacion alta)
 {
+    if (alta.eliminado==false)
+    {
     cout << '\t' << "LEGAJO"<< '\t'<< "MATERIA" << endl;
     cout << '\t' << alta.legajo << '\t'<< alta.id_materia <<endl;
+    }
+    
 }
 
 void leerAsigMat()
@@ -416,8 +422,11 @@ void modificarAlumno()
 // DAR DE BAJA UN ALUMNO //
 void mostrarAsigM(tAsignacion alta)
 {
-    cout << "||"<<"----ID-MATERIA----"<<"||"<<"----ID-LEGAJO---"<<"||"<<endl;
-    cout << "||" << alta.id_materia << "||" << alta.legajo << endl; 
+    if (alta.eliminado==false)
+    {
+        cout << "||"<<"----ID-MATERIA----"<<"||"<<"----ID-LEGAJO---"<<"||"<<endl;
+        cout << "||" << alta.id_materia << "||" << alta.legajo << endl; 
+    }
 }
 
 void leerAlumAsig(char alumno[50])
@@ -459,8 +468,6 @@ bool bajaLogicaAsigMat(int materia,int legajo)
                 fclose(p);
                 seborro=true;
             }
-        
-            
         }
         fclose(p);
         return seborro;
