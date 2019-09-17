@@ -4,6 +4,7 @@
         "istream": "cpp",
         "__locale": "cpp",
         "iostream": "cpp",
-        "terminal.external.osxExec": "iTerm.app"
+        "terminal.external.osxExec": "iTerm.app",
+        "ostream": "cpp"
     }
 }

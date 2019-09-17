@@ -9,8 +9,8 @@ using namespace std;
 
 int main()
 {
-
-    menuMaterias();
-           
-    return 0;
+    bienvenida();
+    menu();
+    
+   return 0;
 }

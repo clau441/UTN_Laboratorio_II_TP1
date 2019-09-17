@@ -35,6 +35,14 @@ struct tAsignacion
     bool eliminado;
 };
 
+// Validacion //
+
+// Validacion de CHAR //
+
+// Validacion de Numero //
+
+
+
 // MATERIAS
 
 int obtenerIDM()
@@ -47,12 +55,16 @@ int obtenerIDM()
 
 void altaMateria(tMateria *mat)
 {
-    cout << "||----------ALTA DE MATERIAS  " << mat->id_materia << "---------------------" <<endl;
-    cout << "||..............................................." <<endl;
-    cout << " Ingrese Materia" << endl;
+    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;    
+    cout << "|                                                     |" << endl;
+    cout << "| ALTA DE MATERIAS  " << mat->id_materia<<           "|" << endl;
+    cout << "|                                                     |" << endl;
+    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;    
+    cout <<endl;    
+    cout << " INGRESE EL NOMBRE DE LA MATERIA A DAR DE ALTA" << endl;
     cin.getline(mat->nombreM,50);
     cin.ignore();
-    cout << " Ingrese Profesor a cargo  " << endl;
+    cout << " INGRESE EL NOMBRE DEL PROFESOR A CARGO DE LA MATERIA" << endl;
     cin.getline(mat->profesorM,50);
     cin.ignore();
     mat->eliminado=false;
@@ -67,13 +79,19 @@ bool guardarMateria(tMateria mat)
         {
             fwrite(&mat,sizeof(tMateria),1,p);
             fclose(p);
-            guardo=true;
+            guardo=true;    
         }
     return guardo;
 }
 
 void mostrarMateria(tMateria mat)
 {
+    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;    
+    cout << "|                                                     |" << endl;
+    cout << "| LISTADO DE MATERIAS DADOS DE ALTA EN EL SISTEMA     |" << endl;
+    cout << "|                                                     |" << endl;
+    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;    
+    cout <<endl;      
     cout << mat.id_materia << " - " << mat.nombreM << " - " << mat.profesorM <<endl;
 }
 
@@ -506,34 +524,49 @@ void darBajaAlumMat()
     }
 }
 
-// MENU
+// MENUs
 
-void menuMaterias()
+void bienvenida()
 {
+    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cout << "|                                                     |" << endl;
+    cout << "| BIENVENIDOS AL SISTEMA DE ALTA DE ALUMNOS Y MATERIA |" << endl;
+    cout << "| --------------------------------------------------- |" << endl;
+    cout << "|                                                     |" << endl;
+    cout << "||||||||||||| UTN FACULTAD REGIONAL DE PACHECO ||||||||" << endl;
+    cout << "||||||||||||| -------------------------------- ||||||||" << endl;
+    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cin.ignore();
+    system("clear");
+}
 
-    bool salir = false;
-
+void subMenuMaterias()
+{
+    bool salir=false;
     int op;
 
     while (!salir)
     {
-        cout << "||--------------------------------||"<< endl;
-        cout << "|| 1 - Alta de materias           ||"<< endl;
-        cout << "|| 2 - Listar Materias            ||"<< endl;
-        cout << "|| 3 - Alta Alumnos               ||"<< endl;
-        cout << "|| 4 - Listar Alumnos             ||"<< endl;
-        cout << "|| 5 - Asignar Alumnos - Materias ||"<< endl;
-        cout << "|| 6 - Mostar Alumnos - Materias  ||"<< endl;
-        cout << "|| 7 - Modificar datos del alumno ||"<< endl;
-        cout << "|| 8 - Dar de baja un alumno      ||"<< endl;
-        cout << "|| 0 - Salir                      ||"<< endl;
-        cout << "||--------------------------------||"<< endl;
-        cout << "|| Ingrese la opcion" << endl;
-        cin >> op;
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cout << "|                                                     |" << endl;
+        cout << "| 1.- ALTA DE MATERIA                                 |" << endl;
+        cout << "| --------------------------------------------------- |" << endl;
+        cout << "| 2.- LISTAR MATERIAS DADAS DE ALTA                   |" << endl;
+        cout << "| --------------------------------------------------- |" << endl;
+        cout << "| 0.- SALIR                                           |" << endl;
+        cout << "| --------------------------------------------------- |" << endl;
+        cout << "|                                                     |" << endl;
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cin>>op;
         cin.ignore();
-        //system("clr");
+        system("clear");
 
-        switch(op)
+        switch (op)
         {
         case 1:
             {
@@ -558,10 +591,50 @@ void menuMaterias()
                 leerMaterias();
                 cin.ignore(); 
             }
-       
             break;
 
-        case 3:
+        case 0:
+            {
+                salir=true;
+            }
+            break;
+
+        default:
+            {
+                cout << "OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
+                cout << "En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
+            }
+            break;
+        }    
+    }    
+}
+
+void subMenuAlumnos()
+{
+    bool salir=false;
+    int op;
+
+    while (!salir)
+    {
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cout << "|                                                     |" << endl;
+        cout << "| 1.- ALTA DE ALUMNO                                  |" << endl;
+        cout << "| --------------------------------------------------- |" << endl;
+        cout << "| 2.- LISTAR ALUMNOS DADOS DE ALTA                    |" << endl;
+        cout << "| --------------------------------------------------- |" << endl;
+        cout << "| 0.- SALIR                                           |" << endl;
+        cout << "| --------------------------------------------------- |" << endl;
+        cout << "|                                                     |" << endl;
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cin>>op;
+        cin.ignore();
+        system("clear");
+
+        switch (op)
+        {
+        case 1:
             {
                 tAlumno alum;
                 alum.legajo=obtenerIDA();
@@ -577,45 +650,209 @@ void menuMaterias()
                 cin.ignore();
             }
             break;
-        case 4:
+        
+        case 2:
             {
                 leerAlumno();
-                cin.ignore();
+                cin.ignore(); 
             }
             break;
 
-        case 5:
+        case 0:
             {
-                altaAsigMat();
+                salir=true;
             }
             break;
 
-        case 6:
+        default:
             {
-                leerAsigMat();
-            }    
+                cout << "OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
+                cout << "En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
+            }
             break;
 
-        case 7:
+        }    
+    }      
+}
+
+void subMenuModificaicones()
+{
+    bool salir=false;
+    int op;
+
+    while (!salir)
+    {
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cout << "|                                                     |" << endl;
+        cout << "| 1.- MODIFICAR DATOS DE UN ALUMNO                    |" << endl;
+        cout << "| --------------------------------------------------- |" << endl;
+        cout << "| 2.- ELIMINAR ASIGNACION DE ALUMNO A UNA MATERIA     |" << endl;
+        cout << "| --------------------------------------------------- |" << endl;
+        cout << "| 0.- SALIR                                           |" << endl;
+        cout << "| --------------------------------------------------- |" << endl;
+        cout << "|                                                     |" << endl;
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cin>>op;
+        cin.ignore();
+        system("clear");
+
+        switch (op)
+        {
+        case 1:
             {
                 modificarAlumno();
                 cin.ignore();
             }
-
-        case 8:
+            break;
+        
+        case 2:
             {
                 darBajaAlumMat();
                 cin.ignore();
             }
             break;
+
         case 0:
             {
-                salir=true; 
+                salir=true;
             }
-            break;   
+            break;
+
         default:
             {
-                cout << "Opcion No valida!! ingrese la opcion correcta. ";
+                cout << "OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
+                cout << "En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
+            }
+            break;
+        }      
+    }
+}
+
+void subMenuAsignacion()
+{
+    bool salir=false;
+    int op;
+
+    while (!salir)
+    {
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cout << "|                                                     |" << endl;
+        cout << "| 1.- ASIGNACION DE ALUMNO A MATERIA                  |" << endl;
+        cout << "| --------------------------------------------------- |" << endl;
+        cout << "| 2.- LISTAR ASIGNACION DE ALUMNO A MATERIAS          |" << endl;
+        cout << "| --------------------------------------------------- |" << endl;
+        cout << "| 0.- SALIR                                           |" << endl;
+        cout << "| --------------------------------------------------- |" << endl;
+        cout << "|                                                     |" << endl;
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cin>>op;
+        cin.ignore();
+        system("clear");
+
+        switch (op)
+        {
+        case 1:
+            {
+                altaAsigMat();
+                cin.ignore();
+            }
+            break;
+        
+        case 2:
+            {
+                leerAsigMat();
+                cin.ignore(); 
+            }
+            break;
+
+        case 0:
+            {
+                salir=true;
+            }
+            break;
+
+        default:
+            {
+                cout << "OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
+                cout << "En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
+            }
+            break;
+        }
+    }  
+}
+
+void menu()
+{
+    bool salir = false;
+
+    int op;
+
+    while (!salir)
+    {
+    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cout << "|                                                     |" << endl;
+    cout << "| 1.- MATERIAS                                        |" << endl;
+    cout << "| --------------------------------------------------- |" << endl;
+    cout << "| 2.- ALUMNOS                                         |" << endl;
+    cout << "| --------------------------------------------------- |" << endl;
+    cout << "| 3.- ASIGNACION DE ALUMNO A MATERIA                  |" << endl;
+    cout << "| --------------------------------------------------- |" << endl;
+    cout << "| 4.- MODIFICACION DE CAMPOS                          |" << endl;
+    cout << "| --------------------------------------------------- |" << endl;
+    cout << "| 0.- SALIR                                           |" << endl;
+    cout << "|                                                     |" << endl;    
+    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cin>>op;
+    cin.ignore();
+    system("clear");
+    
+    switch (op)
+    {
+    case 1:
+        {
+            subMenuMaterias();
+            cin.get();
+            cin.ignore();
+        }
+        break;
+    
+    case 2:
+        {
+            subMenuAlumnos();
+            cin.ignore();
+        }
+        break;
+
+        case 3:
+            {
+                subMenuAsignacion();
+                cin.ignore();
+            }
+            break;
+
+        case 4:
+            {
+                subMenuModificaicones();
+                cin.ignore();
+            }
+            break;
+
+        case 0:
+            {
+                salir=true;
+            }
+            break;
+
+        default:
+            {
+                cout << "OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
+                cout << "En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
             }
             break;
         }
