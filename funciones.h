@@ -1,8 +1,12 @@
 #include <iostream>
 #include <cstdio>
-#include <string.h>
 #include <cstdlib>
 #include <cstring>
+#include <iomanip>
+
+using std::setw;
+using std::left;
+using std::right;
 
 using namespace std;
 
@@ -86,13 +90,8 @@ bool guardarMateria(tMateria mat)
 
 void mostrarMateria(tMateria mat)
 {
-    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;    
-    cout << "|                                                     |" << endl;
-    cout << "| LISTADO DE MATERIAS DADOS DE ALTA EN EL SISTEMA     |" << endl;
-    cout << "|                                                     |" << endl;
-    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;    
-    cout <<endl;      
-    cout << mat.id_materia << " - " << mat.nombreM << " - " << mat.profesorM <<endl;
+    cout<< setw(10) << right << "ID MATERIA" << setw(20) <<"NOMBRE MATERIA "<< endl; 
+    cout << setw(5) << right << mat.id_materia << setw(15) << right << " - " << mat.nombreM << " - " << mat.profesorM <<endl;
 }
 
 void leerMaterias()
@@ -102,6 +101,13 @@ void leerMaterias()
     p=fopen(MATERIAS,"rb");
     if (p!=NULL)
     {
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;    
+        cout << "|                                                     |" << endl;
+        cout << "| LISTADO DE MATERIAS DADOS DE ALTA EN EL SISTEMA     |" << endl;
+        cout << "|                                                     |" << endl;
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;    
+        cout <<endl;  
+
         while(fread(&mat,sizeof(tMateria),1,p))
         {
             mostrarMateria(mat);
