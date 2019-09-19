@@ -69,6 +69,7 @@ bool validarChar(char *palabra){
         
     return valido;
 }
+
 //_______________________//
 // VALIDACION DE NUMEROS //
 //-----------------------//
@@ -76,29 +77,29 @@ bool validarChar(char *palabra){
 bool validarEntero(char *numero){
     bool  valido=true;
     int x=0;
-
-	char* cad = new char;
-	sprintf(cad,"%i",*numero);
 	
-    if (cad[0] =='\0' || cad[0] == ' ')
+    if (numero[0] =='\0' || numero[0] == ' ')
     {
         valido = false;
     }
     
-    while(cad[0]!='\0')
+    while(numero[0]!='\0')
     {
-        if (!(cad[x]<'0' && cad[x]>'9'))
+        if (!(numero[x]<'0' && numero[x]>'9'))
         {
             valido=false;
         }
         x++;
     }
 
-    // int numero = atoi(cad);
     return valido;
 }
 
-// MATERIAS
+
+
+//__________//
+// MATERIAS //
+//----------//
 
 int obtenerIDM(){
     FILE *p;
@@ -163,9 +164,9 @@ void leerMaterias(){
     }
 }
 
-/////////////
+//_________//
 // ALUMNOS //
-////////////7
+//---------//
 
 int obtenerIDA(){
     FILE *p;
@@ -224,9 +225,9 @@ void leerAlumno(){
     }
 }
 
-////////////////////////////////////
+//________________________________//
 // ASIGNACION DE ALUMNO A MATERIA //
-////////////////////////////////////
+//--------------------------------//
 
 bool buscarAlumno(char alumno[50]){
     tAlumno alum;
@@ -357,9 +358,9 @@ void leerAsigMat(){
         }
 }
 
-////////////////////////////
+//________________________//
 // MODIFICAR DATOS ALUMNO //
-////////////////////////////
+//------------------------//
 
 bool modificarFechAlum(){
     tAlumno alum;
@@ -481,9 +482,9 @@ void modificarAlumno(){
     }  
 }
 
-///////////////////////////
-// DAR DE BAJA UN ALUMNO //
-///////////////////////////
+//_________________________________//
+// DAR DE BAJA UN ALUMNO A MATERIA //
+//---------------------------------//
 
 void mostrarAsigM(tAsignacion alta){
     if (alta.eliminado==false)
@@ -567,7 +568,9 @@ void darBajaAlumMat(){
     }
 }
 
-// MENUs
+//_______//
+// MENUS //
+//-------//
 
 void bienvenida(){
     cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
@@ -845,54 +848,48 @@ void menu(){
     cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
     cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
     cin>>op;
+
     cin.ignore();
     system("clear");
 
-    switch (op)
-    {
-    case 1:
-        {   
+    switch (op){
+    case 1:{   
             subMenuMaterias();
             cin.ignore();
         }
         break;
     
-    case 2:
-        {
+    case 2:{
             subMenuAlumnos();
             cin.ignore();
         }
         break;
 
-        case 3:
-            {
+    case 3:{
                 subMenuAsignacion();
                 cin.ignore();
             }
             break;
 
-        case 4:
-            {
+    case 4:{
                 subMenuModificaicones();
                 cin.ignore();
             }
             break;
 
-        case 0:
-            {
+    case 0:{
                 salir=true;
             }
             break;
 
-        default:
-            {
+    default:{
                 cout << "OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
                 cout << "En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
             }
             break;
         }
+        }
     }
-}
 
 void saludos(){
     cout << setw(50) << right << "GRACIAS POR USAR ESTE PROGRAMA"<<endl;
