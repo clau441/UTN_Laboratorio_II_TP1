@@ -7,6 +7,7 @@ int main()
 {
     bienvenida();
     menu();
+    saludos();
     
    return 0;
 }

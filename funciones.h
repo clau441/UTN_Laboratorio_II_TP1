@@ -4,15 +4,20 @@
 #include <cstring>
 #include <iomanip>
 
+
 using std::setw;
 using std::left;
 using std::right;
 
 using namespace std;
 
-const char ALUMNOS[]="alumnos.txt";
-const char MATERIAS[]="materias.txt";
-const char ALUMAT[]="alumnosmateria.txt";
+const char ALUMNOS[]="alumnos.dat";
+const char MATERIAS[]="materias.dat";
+const char ALUMAT[]="alumnosmateria.dat";
+
+/////////////////
+// ESTRUCTURAS //
+/////////////////
 
 struct tMateria{
     int id_materia;
@@ -36,9 +41,13 @@ struct tAsignacion{
     bool eliminado;
 };
 
-// Validacion //
+//////////////////
+// VALIDACIONES //
+//////////////////
 
-// Validacion de Char  //
+//____________________//
+// VALIDACION DE CHAR //
+//--------------------//
 
 bool validarChar(char *palabra){
     bool valido=true;
@@ -60,10 +69,34 @@ bool validarChar(char *palabra){
         
     return valido;
 }
+//_______________________//
+// VALIDACION DE NUMEROS //
+//-----------------------//
 
-// Validacion de Numero //
+bool validarEntero(char *numero){
+    bool  valido=true;
+    int x=0;
 
+	char* cad = new char;
+	sprintf(cad,"%i",*numero);
+	
+    if (cad[0] =='\0' || cad[0] == ' ')
+    {
+        valido = false;
+    }
+    
+    while(cad[0]!='\0')
+    {
+        if (!(cad[x]<'0' && cad[x]>'9'))
+        {
+            valido=false;
+        }
+        x++;
+    }
 
+    // int numero = atoi(cad);
+    return valido;
+}
 
 // MATERIAS
 
@@ -130,7 +163,9 @@ void leerMaterias(){
     }
 }
 
-// ALUMNOS
+/////////////
+// ALUMNOS //
+////////////7
 
 int obtenerIDA(){
     FILE *p;
@@ -189,7 +224,9 @@ void leerAlumno(){
     }
 }
 
-// Asignacion a Materia //
+////////////////////////////////////
+// ASIGNACION DE ALUMNO A MATERIA //
+////////////////////////////////////
 
 bool buscarAlumno(char alumno[50]){
     tAlumno alum;
@@ -320,7 +357,9 @@ void leerAsigMat(){
         }
 }
 
-// MODIFICAR DATOS USUARIO
+////////////////////////////
+// MODIFICAR DATOS ALUMNO //
+////////////////////////////
 
 bool modificarFechAlum(){
     tAlumno alum;
@@ -442,7 +481,9 @@ void modificarAlumno(){
     }  
 }
 
+///////////////////////////
 // DAR DE BAJA UN ALUMNO //
+///////////////////////////
 
 void mostrarAsigM(tAsignacion alta){
     if (alta.eliminado==false)
@@ -784,9 +825,8 @@ void subMenuAsignacion(){
 
 void menu(){
     bool salir = false;
-
     int op;
-
+    
     while (!salir)
     {
     cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
@@ -807,13 +847,12 @@ void menu(){
     cin>>op;
     cin.ignore();
     system("clear");
-    
+
     switch (op)
     {
     case 1:
-        {
+        {   
             subMenuMaterias();
-            cin.get();
             cin.ignore();
         }
         break;
@@ -853,4 +892,8 @@ void menu(){
             break;
         }
     }
+}
+
+void saludos(){
+    cout << setw(50) << right << "GRACIAS POR USAR ESTE PROGRAMA"<<endl;
 }
