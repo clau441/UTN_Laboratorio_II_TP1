@@ -14,16 +14,14 @@ const char ALUMNOS[]="alumnos.txt";
 const char MATERIAS[]="materias.txt";
 const char ALUMAT[]="alumnosmateria.txt";
 
-struct tMateria
-{
+struct tMateria{
     int id_materia;
     char nombreM[50];
     char profesorM[50];
     bool eliminado;
 };
 
-struct tAlumno
-{
+struct tAlumno{
     int legajo;
     char nombre[50];
     int dia;
@@ -32,8 +30,7 @@ struct tAlumno
     bool eliminado;
 };
 
-struct tAsignacion
-{
+struct tAsignacion{
     int id_materia;
     int legajo;
     bool eliminado;
@@ -41,7 +38,28 @@ struct tAsignacion
 
 // Validacion //
 
-// Validacion de CHAR //
+// Validacion de Char  //
+
+bool validarChar(char *palabra){
+    bool valido=true;
+    int x=0;
+
+    if (palabra[0] == '\0' || palabra[0] == ' ')
+    {
+        valido=false;
+    }
+
+    while(palabra[0]!='\0')
+    {
+        if (!( (palabra[x]<'a' && palabra[x]>'z') || (palabra[x]<'A' && palabra[x]>'Z') || (palabra[x]==' ')))
+        {
+            valido=false;
+        }
+        x++;
+    }
+        
+    return valido;
+}
 
 // Validacion de Numero //
 
@@ -49,19 +67,17 @@ struct tAsignacion
 
 // MATERIAS
 
-int obtenerIDM()
-{
+int obtenerIDM(){
     FILE *p;
     p=fopen(MATERIAS,"ab");
     fseek(p,0,SEEK_END);
     return (ftell(p)/sizeof(tMateria)+1);
 }
 
-void altaMateria(tMateria *mat)
-{
+void altaMateria(tMateria *mat){
     cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;    
     cout << "|                                                     |" << endl;
-    cout << "| ALTA DE MATERIAS  " << mat->id_materia<<           "|" << endl;
+    cout << "| ALTA DE MATERIAS  " << '\t' << '\t' << '\t' << '\t'<<    mat->id_materia<< "   |" << endl;
     cout << "|                                                     |" << endl;
     cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;    
     cout <<endl;    
@@ -74,8 +90,7 @@ void altaMateria(tMateria *mat)
     mat->eliminado=false;
 }
 
-bool guardarMateria(tMateria mat)
-{
+bool guardarMateria(tMateria mat){
     bool guardo=false;
     FILE *p;
     p=fopen(MATERIAS,"ab");
@@ -88,14 +103,11 @@ bool guardarMateria(tMateria mat)
     return guardo;
 }
 
-void mostrarMateria(tMateria mat)
-{
-    cout<< setw(10) << right << "ID MATERIA" << setw(20) <<"NOMBRE MATERIA "<< endl; 
-    cout << setw(5) << right << mat.id_materia << setw(15) << right << " - " << mat.nombreM << " - " << mat.profesorM <<endl;
+void mostrarMateria(tMateria mat){
+    cout << setw(5) << right << mat.id_materia << setw(9) << right << " - " <<mat.nombreM << setw(15) << right << " - " << setw(5) << left << mat.profesorM <<endl;
 }
 
-void leerMaterias()
-{
+void leerMaterias(){
     tMateria mat;
     FILE *p;
     p=fopen(MATERIAS,"rb");
@@ -105,7 +117,9 @@ void leerMaterias()
         cout << "|                                                     |" << endl;
         cout << "| LISTADO DE MATERIAS DADOS DE ALTA EN EL SISTEMA     |" << endl;
         cout << "|                                                     |" << endl;
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;    
+        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+        cout<< setw(10) << right << "ID MATERIA" << setw(20) <<"NOMBRE MATERIA "<< endl; 
+    
         cout <<endl;  
 
         while(fread(&mat,sizeof(tMateria),1,p))
@@ -118,16 +132,14 @@ void leerMaterias()
 
 // ALUMNOS
 
-int obtenerIDA()
-{
+int obtenerIDA(){
     FILE *p;
     p=fopen(ALUMNOS,"ab");
     fseek(p,0,SEEK_END);
     return (ftell(p)/sizeof(tAlumno)+5);
 }
 
-void altaAlumno(tAlumno *alum)
-{
+void altaAlumno(tAlumno *alum){
     cout << "||----------ALTA DE Alumno  " << alum->legajo << "---------------------" <<endl;
     cout << "||..............................................." <<endl;
     cout << " Ingrese Nombre Alumno" << endl;
@@ -145,8 +157,7 @@ void altaAlumno(tAlumno *alum)
     alum->eliminado=false;
 }
 
-bool guardarAlumno(tAlumno alum)
-{
+bool guardarAlumno(tAlumno alum){
     bool guardo=false;
     FILE *p;
     p=fopen(ALUMNOS,"ab");
@@ -159,14 +170,12 @@ bool guardarAlumno(tAlumno alum)
     return guardo;
 }
 
-void mostrarAlumno(tAlumno alum)
-{
+void mostrarAlumno(tAlumno alum){
     cout << '\t'<< "LEGAJO" <<  '\t' <<" - " << '\t' << '\t'<< "NOMBRE" << '\t'<< " - " << '\t' <<"FECHA DE NACIMIENTO" "-"<<endl;
     cout << '\t'<< alum.legajo << '\t' << " - " << '\t' << '\t' << alum.nombre << '\t'<< " - " << alum.dia << "/"<< alum.mes <<"/" << alum.anio << "-"<<endl;
 }
 
-void leerAlumno()
-{
+void leerAlumno(){
     tAlumno alum;
     FILE *p;
     p=fopen(ALUMNOS,"rb");
@@ -182,8 +191,7 @@ void leerAlumno()
 
 // Asignacion a Materia //
 
-bool buscarAlumno(char alumno[50])
-{
+bool buscarAlumno(char alumno[50]){
     tAlumno alum;
     bool existeAlum=false;
     FILE *p;
@@ -202,8 +210,7 @@ bool buscarAlumno(char alumno[50])
     }
 }
 
-bool buscarMateria(int id_mat)
-{
+bool buscarMateria(int id_mat){
     tMateria mat;
     bool existeMat=false;
     FILE *p;
@@ -222,8 +229,7 @@ bool buscarMateria(int id_mat)
     }
 }
 
-int buscarLegajo(char alumno[50])
-{
+int buscarLegajo(char alumno[50]){
     tAlumno alum;
     int legajo=0;
     FILE *p;
@@ -242,8 +248,7 @@ int buscarLegajo(char alumno[50])
     }
 }
 
-bool guardarAlumMat(int legajo, int id_materia)
-{
+bool guardarAlumMat(int legajo, int id_materia){
     tAsignacion alta;
     bool guardo=false;
     FILE *p;
@@ -260,8 +265,7 @@ bool guardarAlumMat(int legajo, int id_materia)
     return guardo;
 }
 
-void altaAsigMat()
-{
+void altaAsigMat(){
     char alumno[50];
     int id_mat;
     cout << "Ingrese el Nombre del Alumno" << endl;
@@ -269,7 +273,7 @@ void altaAsigMat()
 
     if(buscarAlumno(alumno))
     {
-        cout << "El alumno existe en la bas. " << endl;
+        cout << "El alumno existe en la base " << endl;
         cout << "Elija de la siguiente lista el ID de la materia a la que se dara de alta al Alumno"<< endl;
         leerMaterias();
         cout << "Por favor ingrese a que materia se dara de alta el alumno" <<endl;
@@ -293,8 +297,7 @@ void altaAsigMat()
     }
 }
 
-void mostarAsigMat(tAsignacion alta)
-{
+void mostarAsigMat(tAsignacion alta){
     if (alta.eliminado==false)
     {
     cout << '\t' << "LEGAJO"<< '\t'<< "MATERIA" << endl;
@@ -303,8 +306,7 @@ void mostarAsigMat(tAsignacion alta)
     
 }
 
-void leerAsigMat()
-{
+void leerAsigMat(){
     tAsignacion alta;
     FILE *p;
     p=fopen(ALUMAT,"rb");
@@ -320,8 +322,7 @@ void leerAsigMat()
 
 // MODIFICAR DATOS USUARIO
 
-bool modificarFechAlum()
-{
+bool modificarFechAlum(){
     tAlumno alum;
     bool modificado=false;
     char alumnom[50];
@@ -359,8 +360,7 @@ bool modificarFechAlum()
     }
 }
 
-bool modificarNomAlum()
-{
+bool modificarNomAlum(){
     tAlumno alum;
 
     char alumnom[50];
@@ -390,8 +390,7 @@ bool modificarNomAlum()
     }
 }
 
-void modificarAlumno()
-{
+void modificarAlumno(){
         int op;
         bool salir=false;
 
@@ -444,8 +443,8 @@ void modificarAlumno()
 }
 
 // DAR DE BAJA UN ALUMNO //
-void mostrarAsigM(tAsignacion alta)
-{
+
+void mostrarAsigM(tAsignacion alta){
     if (alta.eliminado==false)
     {
         cout << "||"<<"----ID-MATERIA----"<<"||"<<"----ID-LEGAJO---"<<"||"<<endl;
@@ -454,8 +453,7 @@ void mostrarAsigM(tAsignacion alta)
 }
 
 
-void leerAlumAsig(char alumno[50])
-{
+void leerAlumAsig(char alumno[50]){
     tAsignacion alta;
 
     int legajo=buscarLegajo(alumno);
@@ -475,8 +473,7 @@ void leerAlumAsig(char alumno[50])
     }
 }
 
-bool bajaLogicaAsigMat(int materia,int legajo)
-{
+bool bajaLogicaAsigMat(int materia,int legajo){
     tAsignacion asig;
     bool seborro=false;
     FILE *p;
@@ -499,8 +496,7 @@ bool bajaLogicaAsigMat(int materia,int legajo)
     }   
 }
 
-void darBajaAlumMat()
-{
+void darBajaAlumMat(){
     char alumno[50];
     int materia;
 
@@ -532,8 +528,7 @@ void darBajaAlumMat()
 
 // MENUs
 
-void bienvenida()
-{
+void bienvenida(){
     cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
     cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
     cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
@@ -549,8 +544,7 @@ void bienvenida()
     system("clear");
 }
 
-void subMenuMaterias()
-{
+void subMenuMaterias(){
     bool salir=false;
     int op;
 
@@ -615,8 +609,7 @@ void subMenuMaterias()
     }    
 }
 
-void subMenuAlumnos()
-{
+void subMenuAlumnos(){
     bool salir=false;
     int op;
 
@@ -681,8 +674,7 @@ void subMenuAlumnos()
     }      
 }
 
-void subMenuModificaicones()
-{
+void subMenuModificaicones(){
     bool salir=false;
     int op;
 
@@ -736,8 +728,7 @@ void subMenuModificaicones()
     }
 }
 
-void subMenuAsignacion()
-{
+void subMenuAsignacion(){
     bool salir=false;
     int op;
 
@@ -791,8 +782,7 @@ void subMenuAsignacion()
     }  
 }
 
-void menu()
-{
+void menu(){
     bool salir = false;
 
     int op;
