@@ -3,7 +3,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <iomanip>
-
+#include "csystem.h"
+#include <ostream>
 
 using std::setw;
 using std::left;
@@ -14,6 +15,19 @@ using namespace std;
 const char ALUMNOS[]="alumnos.dat";
 const char MATERIAS[]="materias.dat";
 const char ALUMAT[]="alumnosmateria.dat";
+
+const int ANIOACTUAL=2019; 
+/// constante usado para validar que el año en el alta o modificacion de un Alumno 
+/// sea menor al año en curso
+
+void ceroAtras(int esteNum){                                  
+    if (esteNum < 10){
+        cout<<"0"<<esteNum;
+    }
+    else{
+        cout<<esteNum;
+    }
+}
 
 /////////////////
 // ESTRUCTURAS //
@@ -53,14 +67,14 @@ bool validarChar(char *palabra){
     bool valido=true;
     int x=0;
 
-    if (palabra[0] == '\0' || palabra[0] == ' ')
+    if (palabra[0]=='\0' || palabra[0] == ' ')
     {
-        valido=false;
+        return false;
     }
 
-    while(palabra[0]!='\0')
+    while(palabra[x]!='\0')
     {
-        if (!( (palabra[x]<'a' && palabra[x]>'z') || (palabra[x]<'A' && palabra[x]>'Z') || (palabra[x]==' ')))
+        if (!((palabra[x]>='a' && palabra[x]<='z') || (palabra[x]>='A' && palabra[x]<='Z') || (palabra[x]==' ')))
         {
             valido=false;
         }
@@ -69,6 +83,7 @@ bool validarChar(char *palabra){
         
     return valido;
 }
+
 
 //_______________________//
 // VALIDACION DE NUMEROS //
@@ -83,9 +98,9 @@ bool validarEntero(char *numero){
         valido = false;
     }
     
-    while(numero[0]!='\0')
+    while(numero[x]!='\0')
     {
-        if (!(numero[x]<'0' && numero[x]>'9'))
+        if ((numero[x]<'0' || numero[x]>'9'))
         {
             valido=false;
         }
@@ -95,7 +110,50 @@ bool validarEntero(char *numero){
     return valido;
 }
 
+//_______________________//
+// VALIDACION DE FECHA   //
+//-----------------------//
 
+//__________________________//
+// VALIDACION DE FECHA DIA  //
+//--------------------------//
+
+bool validarDiaRango(char *numero){
+    bool valido=true;
+    int dia=atoi(numero);
+    if(dia<1 || dia>31){
+        valido=false;
+    }
+    return valido;
+}
+
+//__________________________//
+// VALIDACION DE FECHA MES  //
+//--------------------------//
+
+bool validarMesRango(char *numero){
+    bool valido=true;
+    int mes=atoi(numero);
+    if(mes<1 || mes>12){
+        valido=false;
+    }
+    return valido;
+}
+
+//___________________________//
+// VALIDACION DE FECHA ANIO  //
+//---------------------------//
+
+bool validarAnioRango(char *numero){
+    bool valido=true;
+    int anio=atoi(numero);
+    if(anio<1900 || anio>=ANIOACTUAL){
+        valido=false;
+    }
+    return valido;
+}
+
+//--------------------------------------------------------------//
 
 //__________//
 // MATERIAS //
@@ -104,23 +162,57 @@ bool validarEntero(char *numero){
 int obtenerIDM(){
     FILE *p;
     p=fopen(MATERIAS,"ab");
+    if (p==NULL) exit(1);
     fseek(p,0,SEEK_END);
     return (ftell(p)/sizeof(tMateria)+1);
 }
 
 void altaMateria(tMateria *mat){
-    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;    
-    cout << "|                                                     |" << endl;
-    cout << "| ALTA DE MATERIAS  " << '\t' << '\t' << '\t' << '\t'<<    mat->id_materia<< "   |" << endl;
-    cout << "|                                                     |" << endl;
-    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;    
-    cout <<endl;    
-    cout << " INGRESE EL NOMBRE DE LA MATERIA A DAR DE ALTA" << endl;
-    cin.getline(mat->nombreM,50);
-    cin.ignore();
-    cout << " INGRESE EL NOMBRE DEL PROFESOR A CARGO DE LA MATERIA" << endl;
-    cin.getline(mat->profesorM,50);
-    cin.ignore();
+    cout << setw(44) << left << " "<< "--------------------------------------------------------" <<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(35) << right << "ALTA DE MATERIA" << setw(20) <<right <<"|" <<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+    cout <<endl;
+
+    cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+    cout << setw(45) << left << " "<< "El ID DE ESTA MATERIA ES  " << mat->id_materia<<endl;    
+    cout << setw(45) << left << " "<< "INGRESE EL NOMBRE DE LA MATERIA A DAR DE ALTA" << endl;
+    cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+
+    cout << setw(45) << left << " "<< cin.getline(mat->nombreM,50);
+
+    bool vm=validarChar(mat->nombreM);
+
+    while(!vm){
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " "<< " HA INGRESADO UN CARACTER NO VALIDO"<< endl;
+        cout << setw(45) << left << " "<< " INGRESE EL NOMBRE DE LA MATERIA A DAR DE ALTA DAR DE ALTA" << setw(20) <<right <<"|" << endl;
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " "<< cin.getline(mat->nombreM,50);
+
+        vm=validarChar(mat->nombreM);
+    }
+
+    cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+    cout << setw(45) << left << " "<< "INGRESE EL NOMBRE DEL PROFESOR A CARGO DE LA MATERIA" << endl;
+    cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+    cout << endl;
+    cout << setw(45) << left << " "<< cin.getline(mat->profesorM,50);
+
+    bool vp=validarChar(mat->profesorM);
+    while (!vp)
+    {
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " "<< " HA INGRESADO UN CARACTER NO VALIDO"<< endl;
+        cout << setw(45) << left << " "<< " INGRESE EL NOMBRE DEl PROFESOR A CARGO DE LA MATERIA" << setw(20) <<right <<"|" << endl;
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " "<< cin.getline(mat->profesorM,50);
+
+        vp=validarChar(mat->profesorM);
+    }
+    
+
     mat->eliminado=false;
 }
 
@@ -138,7 +230,7 @@ bool guardarMateria(tMateria mat){
 }
 
 void mostrarMateria(tMateria mat){
-    cout << setw(5) << right << mat.id_materia << setw(9) << right << " - " <<mat.nombreM << setw(15) << right << " - " << setw(5) << left << mat.profesorM <<endl;
+    cout << setw(13) << left << mat.id_materia << setw(35) << left << mat.nombreM << setw(65) << left << mat.profesorM <<endl;
 }
 
 void leerMaterias(){
@@ -147,22 +239,25 @@ void leerMaterias(){
     p=fopen(MATERIAS,"rb");
     if (p!=NULL)
     {
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;    
-        cout << "|                                                     |" << endl;
-        cout << "| LISTADO DE MATERIAS DADOS DE ALTA EN EL SISTEMA     |" << endl;
-        cout << "|                                                     |" << endl;
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cout<< setw(10) << right << "ID MATERIA" << setw(20) <<"NOMBRE MATERIA "<< endl; 
-    
+        cout << setw(44) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << "     LISTADO DE MATERIAS DADOS DE ALTA EN EL SISTEMA" << setw(3) <<right <<"|" <<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << endl;
+        cout << setw(40) << left << " "<< "ID MATERIA" << setw(18)<< right <<"NOMBRE MATERIA "<< setw(36)<< "PROFESOR A CARGO"<<endl; 
         cout <<endl;  
 
         while(fread(&mat,sizeof(tMateria),1,p))
         {
+            cout << setw(40) << left << " ";
             mostrarMateria(mat);
         }
         fclose(p);
     }
 }
+
+//--------------------------------------------------------------//
 
 //_________//
 // ALUMNOS //
@@ -172,24 +267,111 @@ int obtenerIDA(){
     FILE *p;
     p=fopen(ALUMNOS,"ab");
     fseek(p,0,SEEK_END);
-    return (ftell(p)/sizeof(tAlumno)+5);
+    return (ftell(p)/sizeof(tAlumno)+1);
 }
 
 void altaAlumno(tAlumno *alum){
-    cout << "||----------ALTA DE Alumno  " << alum->legajo << "---------------------" <<endl;
-    cout << "||..............................................." <<endl;
-    cout << " Ingrese Nombre Alumno" << endl;
-    cin.getline(alum->nombre,50);
-    cin.ignore();
-    cout << " Ingrese Dia Nacimiento  " << endl;
-    cin >> alum->dia;
-    cin.ignore();
-    cout << " Ingrese Mes Nacimiento  " << endl;
-    cin >> alum->mes;
-    cin.ignore();
-    cout << " Ingrese Año Nacimiento  " << endl;
-    cin >> alum->anio;
-    cin.ignore();
+    char diachar[1000];
+    char meschar[1000];
+    char aniochar[1000];
+
+    cout << setw(44) << left << " "<< "--------------------------------------------------------" <<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(35) << right << "ALTA DE ALUMNO" << setw(20) <<right <<"|" <<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+    cout << endl;
+    cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+    cout << setw(44) << left << " "<<" INGRESE EL NOMBRE Y APELLDIO DEL ALUMNO A DAR DE ALTA" << endl;    
+    cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+    cout << setw(44) << left << " "<< cin.getline(alum->nombre,50);
+
+
+    bool x=validarChar(alum->nombre);
+    
+    while(!x){
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " "<< " HA INGRESADO UN CARACTER NO VALIDO"<< endl;
+        cout << setw(45) << left << " "<< " INGRESE EL NOMBRE Y APELLDIO DEL ALUMNO A DAR DE ALTA" << setw(20) <<right <<"|" << endl;
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cin.getline(alum->nombre,50);
+        x=validarChar(alum->nombre);
+    }
+
+    cout << setw(45) << left << " " << "--------------------------------------------------------" <<endl;
+    cout << setw(45) << left << " " << " INGRESE EL DIA DE NACIMIENTO " << endl;
+    cout << setw(45) << left << " " << " IMPORTANTE=tiene que ser numerico entre 1 y 31"<< endl;
+    cout << setw(45) << left << " " << "--------------------------------------------------------" <<endl;
+
+    cout << setw(45) << left << " " << cin.getline(diachar,1000);
+
+    bool v=validarEntero(diachar) , dr=validarDiaRango(diachar);
+
+    while((!v) || (!dr)){
+        cout << setw(45) << left << " " << "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " " <<  " HA INGRESADO UN FORMATO DE DIA NO VALIDO"<< endl;
+        cout << setw(45) << left << " " <<  " INGRESE EL DIA DE NACIMIENTO "<< endl;
+        cout << setw(45) << left << " " <<  " IMPORTANTE=tiene que ser numerico entre 1 y 31"<< endl;
+        cout << setw(45) << left << " " << "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " " << cin.getline(diachar,1000);
+
+        v=validarEntero(diachar);
+        dr=validarDiaRango(diachar);
+    }
+
+    int dia=atoi(diachar);
+    
+    alum->dia=dia; 
+    
+    cout << setw(45) << left << " " << "--------------------------------------------------------" <<endl;
+    cout << setw(45) << left << " " << " INGRESE EL MES DE NACIMIENTO " << endl;
+    cout << setw(45) << left << " " << "--------------------------------------------------------" <<endl;
+    cout << endl;
+    cout << setw(45) << left << " " << cin.getline(meschar,1000);
+
+    bool mr=validarMesRango(meschar);
+
+    while((!v) || (!mr)){
+        cout << setw(45) << left << " " << "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " " << " HA INGRESADO UN FORMATO DE MES NO VALIDO"<< endl;
+        cout << setw(45) << left << " " << " INGRESE EL MES DE NACIMIENTO"<< endl;
+        cout << setw(45) << left << " " << " IMPORTANTE=tiene que ser numerico entre 1 y 12"<< endl;
+        cout << setw(45) << left << " " << "--------------------------------------------------------" <<endl;
+        cin.getline(meschar,1000);
+
+        v=validarEntero(meschar);
+        mr=validarMesRango(meschar);
+    }
+
+    int mes=atoi(meschar);
+    
+    alum->mes=mes; 
+
+
+    cout << setw(45) << left << " " << "--------------------------------------------------------" <<endl;
+    cout << setw(45) << left << " " << " INGRESE EL AÑO DE NACIMIENTO  " << endl;
+    cout << setw(45) << left << " " << "--------------------------------------------------------" <<endl;
+
+    cout << setw(45) << left << " " << cin.getline(aniochar,1000);
+
+    bool ar=validarAnioRango(aniochar);
+
+    while((!v) || (!ar)){
+        cout << setw(45) << left << " " << " ----------------------------------------------------- "<< endl;
+        cout << setw(45) << left << " " << " HA INGRESADO UN FORMATO DE AÑO NO VALIDO "<< endl;
+        cout << setw(45) << left << " " << " INGRESE EL AÑO DE NACIMIENTO "<< endl;
+        cout << setw(45) << left << " " << " IMPORTANTE=tiene que menor a "<< ANIOACTUAL << endl;
+        cout << setw(45) << left << " " << " ----------------------------------------------------- "<< endl;
+        cin.getline(aniochar,1000);
+
+        v=validarEntero(aniochar);
+        ar=validarAnioRango(aniochar);
+    }    
+    
+    int anio=atoi(aniochar);
+    
+    alum->anio=anio; 
+
     alum->eliminado=false;
 }
 
@@ -207,8 +389,13 @@ bool guardarAlumno(tAlumno alum){
 }
 
 void mostrarAlumno(tAlumno alum){
+   
     cout << '\t'<< "LEGAJO" <<  '\t' <<" - " << '\t' << '\t'<< "NOMBRE" << '\t'<< " - " << '\t' <<"FECHA DE NACIMIENTO" "-"<<endl;
-    cout << '\t'<< alum.legajo << '\t' << " - " << '\t' << '\t' << alum.nombre << '\t'<< " - " << alum.dia << "/"<< alum.mes <<"/" << alum.anio << "-"<<endl;
+    cout << '\t'<< alum.legajo << '\t' << " - " << '\t' << '\t' << alum.nombre << '\t'<< " - "; 
+    ceroAtras(alum.dia);
+    cout << "/";
+    ceroAtras(alum.mes);
+    cout <<"/" << alum.anio << "-"<<endl;
 }
 
 void leerAlumno(){
@@ -225,11 +412,13 @@ void leerAlumno(){
     }
 }
 
+//--------------------------------------------------------------//
+
 //________________________________//
 // ASIGNACION DE ALUMNO A MATERIA //
 //--------------------------------//
 
-bool buscarAlumno(char alumno[50]){
+bool buscarAlumnoID(int legajo){
     tAlumno alum;
     bool existeAlum=false;
     FILE *p;
@@ -238,7 +427,7 @@ bool buscarAlumno(char alumno[50]){
     {
         while(fread(&alum,sizeof(tAlumno),1,p)!=0)
         {
-            if(strcmp(alumno, alum.nombre)==0)
+            if(legajo==alum.legajo)
                 {
                     existeAlum=true;
                     fclose(p);
@@ -304,12 +493,13 @@ bool guardarAlumMat(int legajo, int id_materia){
 }
 
 void altaAsigMat(){
-    char alumno[50];
-    int id_mat;
-    cout << "Ingrese el Nombre del Alumno" << endl;
-    cin.getline(alumno,50);
+    //char alumno[50];
 
-    if(buscarAlumno(alumno))
+    int id_mat,legajo;
+    cout << setw(45) << left << " "<<"INGRESE EL LEGAJO DEL ALUMNO" << endl;
+    cout << setw(45) << left << " "; cin>>legajo;
+
+    if(buscarAlumnoID(legajo))
     {
         cout << "El alumno existe en la base " << endl;
         cout << "Elija de la siguiente lista el ID de la materia a la que se dara de alta al Alumno"<< endl;
@@ -318,28 +508,28 @@ void altaAsigMat(){
         cin >> id_mat;
         if(buscarMateria(id_mat))
         {   
-            int legajo=(buscarLegajo(alumno));
+            //int legajo=(buscarLegajo(alumno));
             if(guardarAlumMat(legajo, id_mat))
             {
-                cout << "El Alumno se cargo correctamente";
+                cout << setw(45) << left << " "<< "EL ALUMNO SE ASIGNO CORRECTAMENTE A LA MATERIA SOLICITADA";
             }
         }
         else
             {
-                cout << "El codigo de materia elegido es incorrecto" << endl;
+                cout << setw(45) << left << " "<< "EL ALUMNO NO SE PUDO ASIGNO CORRECTAMENTE A LA MATERIA SOLICITADA" << endl;
+                cout << setw(45) << left << " "<< "POR FAVOR PRECIONE ENTER PARA INTENTARLO NUEVAMENTE" << endl;
             }               
     }
     else
     {
-        cout << "El alumno no esta dado de alta en el sistema" << endl;
+        cout << setw(45) << left << " "<< "El alumno no esta dado de alta en el sistema" << endl;
     }
 }
 
 void mostarAsigMat(tAsignacion alta){
     if (alta.eliminado==false)
     {
-    cout << '\t' << "LEGAJO"<< '\t'<< "MATERIA" << endl;
-    cout << '\t' << alta.legajo << '\t'<< alta.id_materia <<endl;
+    cout << setw(45) << left << " "<< '\t' << alta.legajo << '\t'<< alta.id_materia <<endl;
     }
     
 }
@@ -350,6 +540,14 @@ void leerAsigMat(){
     p=fopen(ALUMAT,"rb");
     if(p!=NULL)
         {
+            cout << setw(44) << left << " "<< "--------------------------------------------------------" <<endl;
+            cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+            cout << setw(45) << left << " "<< "|" <<  "        MOSTRAR ASIGNACION ALUMNOS POR MATERIA" << setw(9) <<right <<"|" <<endl;
+            cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+            cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+            cout << endl;
+            cout << setw(45) << left << " "<< '\t' << "LEGAJO"<< '\t'<< "MATERIA" << endl;
+
             while (fread(&alta,sizeof(tAsignacion),1,p))
             {
                 mostarAsigMat(alta);
@@ -436,11 +634,25 @@ void modificarAlumno(){
 
         while (!salir)
         {
-        cout << "Que desea modificar del Alumno" << endl;
-        cout << "1.- Nombre" << endl;
-        cout << "2.- Fecha de Nacimiento" << endl;
-        cout << "0.- Salir" << endl;
-        cout << "Ingrese una opcion" << endl;
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| QUE DESEA MODIFICAR DEL ALUMNO                       |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;              
+        cout << setw(45) << left << " "<< "| 1.- MODIFICAR NOMBRE Y APELLIDO                      |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| 2.- MODIFICAR FECHA DE NACIMIENTO                    |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| 0.- SALIR                                            |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;   
+        cout << endl;
+        cout << setw(45) << left << " "<<"INGRESE UNA OPCION" << endl;
         cin >> op;
         cin.ignore();
         switch (op)
@@ -449,11 +661,11 @@ void modificarAlumno(){
             {
                 if (modificarNomAlum())
                 {
-                    cout << "El nombre del usuario se modifico correctamente" << endl;
+                    cout << setw(45) << left << " "<< "El nombre del usuario se modifico correctamente" << endl;
                 }
                 else
                 {
-                    cout << "El nombre no se pudo modificar" << endl;
+                    cout << setw(45) << left << " "<< "El nombre no se pudo modificar" << endl;
                 }
             }
             break;
@@ -461,11 +673,11 @@ void modificarAlumno(){
             {
                 if (modificarFechAlum())
                 {
-                    cout << "Se pudo modificar la fecha de nacimiento del Alumno" <<endl;
+                    cout << setw(45) << left << " "<<  "Se pudo modificar la fecha de nacimiento del Alumno" <<endl;
                 }   
                 else
                 {
-                    cout << "No se pudo modificar la fecha de nacimiento del Alumno" <<endl;
+                    cout << setw(45) << left << " "<< "No se pudo modificar la fecha de nacimiento del Alumno" <<endl;
                 }
                 
             }
@@ -489,16 +701,16 @@ void modificarAlumno(){
 void mostrarAsigM(tAsignacion alta){
     if (alta.eliminado==false)
     {
-        cout << "||"<<"----ID-MATERIA----"<<"||"<<"----ID-LEGAJO---"<<"||"<<endl;
-        cout << "||" << alta.id_materia << "||" << alta.legajo << endl; 
+        cout << setw(45) << left << " "<< "||"<<"----ID-MATERIA----"<<"||"<<"----ID-LEGAJO---"<<"||"<<endl;
+        cout << setw(45) << left << " "<< "||" << alta.id_materia << "||" << alta.legajo << endl; 
     }
 }
 
 
-void leerAlumAsig(char alumno[50]){
+void leerAlumAsig(int legajo){
     tAsignacion alta;
 
-    int legajo=buscarLegajo(alumno);
+    // int legajo=buscarLegajo(alumno);
 
     FILE *p;
     p=fopen(ALUMAT,"rb");
@@ -539,32 +751,30 @@ bool bajaLogicaAsigMat(int materia,int legajo){
 }
 
 void darBajaAlumMat(){
-    char alumno[50];
-    int materia;
+    int materia, legajo;
 
-    cout << "Ingrese el Nombre del Alumno"<<endl;
-    cin.getline(alumno,50);
-    cin.ignore();
-    if (buscarAlumno(alumno))
-    {
-        cout<<"Las materias asignadas de este Alumno son "<<endl; 
-        leerAlumAsig(alumno);
-        cout << "Indique el ID de la materia que se dara de baja del Alumno" <<endl;
-        cin>>materia;
-        int legajo=buscarLegajo(alumno);
+    cout << setw(45) << left << " "<<"INGRESE EL ID DEL ALUMNO A DAR DE BAJA DE MATERIA"<<endl;
+    cout << setw(45) << left << " ";cin>>legajo;
+
+    if (buscarAlumnoID(legajo)){
+        cout << setw(45) << left << " "<<"LAS MATERIAS ASIGNADAS AL ALUMNO SON "<<endl; 
+        leerAlumAsig(legajo);
+        cout << setw(45) << left << " "<<"Indique el ID de la materia que se dara de baja del Alumno" <<endl;
+        cout << setw(45) << left << " "; cin>>materia;
+        // int legajo=buscarLegajo(alumno);
         if(bajaLogicaAsigMat(materia, legajo))
         {
-            cout << "La baja se realizo correctamente" <<endl;
+            cout << setw(45) << left << " "<<"La baja se realizo correctamente" <<endl;
         }
         else
         {
-            cout << "La baja no se pudor realizar correctamente" <<endl;
+            cout << setw(45) << left << " "<<"La baja no se pudor realizar correctamente" <<endl;
         }
 
     }
     else
     {
-        cout << "El alumno no existe"<< endl;
+        cout << setw(45) << left << " "<<"EL LEGAJO DEL ALUMO NO EXISTE"<< endl;
     }
 }
 
@@ -573,58 +783,68 @@ void darBajaAlumMat(){
 //-------//
 
 void bienvenida(){
-    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-    cout << "|                                                     |" << endl;
-    cout << "| BIENVENIDOS AL SISTEMA DE ALTA DE ALUMNOS Y MATERIA |" << endl;
-    cout << "| --------------------------------------------------- |" << endl;
-    cout << "|                                                     |" << endl;
-    cout << "||||||||||||| UTN FACULTAD REGIONAL DE PACHECO ||||||||" << endl;
-    cout << "||||||||||||| -------------------------------- ||||||||" << endl;
-    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(40) << right << "BIENVENIDOS AL PROGRAMA TP1"<< setw(15) << right <<"|" <<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
     cin.ignore();
     system("clear");
 }
 
 void subMenuMaterias(){
     bool salir=false;
-    int op;
+    char op[1000];
 
     while (!salir)
     {
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cout << "|                                                     |" << endl;
-        cout << "| 1.- ALTA DE MATERIA                                 |" << endl;
-        cout << "| --------------------------------------------------- |" << endl;
-        cout << "| 2.- LISTAR MATERIAS DADAS DE ALTA                   |" << endl;
-        cout << "| --------------------------------------------------- |" << endl;
-        cout << "| 0.- SALIR                                           |" << endl;
-        cout << "| --------------------------------------------------- |" << endl;
-        cout << "|                                                     |" << endl;
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cin>>op;
-        cin.ignore();
-        system("clear");
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| 1.- ALTA DE MATERIA                                  |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| 2.- LISTAR MATERIAS DADAS DE ALTA                    |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| 0.- SALIR                                            |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " "<<cin.getline(op,1000);
+        bool v=validarEntero(op);
+        while(!v){
+            cout << setw(45) << left << " "<< "Opcion no valida!!! - Ingrese la opcion como entero sin ingresar otro valor no deseado "<<endl;
+            cout << setw(45) << left << " "<< cin.getline(op,1000);
+            v=validarEntero(op);
+            }
+        int op2=atoi(op);
+        
+        void cls();
 
-        switch (op)
+        switch (op2)
         {
         case 1:
             {
+                void cls();
                 tMateria mat; 
                 mat.id_materia=obtenerIDM();
                 altaMateria(&mat);
                 if(guardarMateria(mat))
                     {
-                        cout <<"La materia se guardo correctamente" << endl;
+                        cout << setw(45) << left << " "<<"La materia se guardo correctamente" << endl;
+                        void cls();
                     }
                 else
                     {
 
-                        cout <<"La mataria no se pudo guardar" << endl;
+                        cout << setw(45) << left << " "<< "La mataria no se pudo guardar" << endl;
                     }
                 cin.ignore();
             }
@@ -645,8 +865,8 @@ void subMenuMaterias(){
 
         default:
             {
-                cout << "OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
-                cout << "En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
+                cout << setw(45) << left << " "<< "OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
+                cout << setw(45) << left << " "<< "En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
             }
             break;
         }    
@@ -655,27 +875,37 @@ void subMenuMaterias(){
 
 void subMenuAlumnos(){
     bool salir=false;
-    int op;
+    char op[1000];
 
     while (!salir)
     {
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cout << "|                                                     |" << endl;
-        cout << "| 1.- ALTA DE ALUMNO                                  |" << endl;
-        cout << "| --------------------------------------------------- |" << endl;
-        cout << "| 2.- LISTAR ALUMNOS DADOS DE ALTA                    |" << endl;
-        cout << "| --------------------------------------------------- |" << endl;
-        cout << "| 0.- SALIR                                           |" << endl;
-        cout << "| --------------------------------------------------- |" << endl;
-        cout << "|                                                     |" << endl;
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cin>>op;
-        cin.ignore();
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| 1.- ALTA DE ALUMNO                                   |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| 2.- LISTAR ALUMNOS DADOS DE ALTA                     |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| 0.- SALIR                                            |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cin.getline(op,1000);
+        bool v=validarEntero(op);
+        while(!v){
+        cout << setw(45) << left << " "<<"Opcion no valida!!! - Ingrese la opcion como entero sin ingresar otro valor no deseado "<<endl;
+        cin.getline(op,1000);
+        v=validarEntero(op);
+        }
+        int op2=atoi(op);
+
         system("clear");
 
-        switch (op)
+        switch (op2)
         {
         case 1:
             {
@@ -684,11 +914,11 @@ void subMenuAlumnos(){
                 altaAlumno(&alum);
                 if(guardarAlumno(alum))
                 {
-                    cout << " Se cargo el alumno correctamente ";
+                    cout << setw(45) << left << " "<<" Se cargo el alumno correctamente ";
                 }
                 else
                 {
-                    cout << " El alumno no pudo ser cargado";
+                    cout << setw(45) << left << " "<<" El alumno no pudo ser cargado";
                 }
                 cin.ignore();
             }
@@ -709,8 +939,8 @@ void subMenuAlumnos(){
 
         default:
             {
-                cout << "OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
-                cout << "En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
+                cout << setw(45) << left << " "<<"OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
+                cout << setw(45) << left << " "<<"En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
             }
             break;
 
@@ -720,27 +950,36 @@ void subMenuAlumnos(){
 
 void subMenuModificaicones(){
     bool salir=false;
-    int op;
+    char op[1000];
 
     while (!salir)
     {
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cout << "|                                                     |" << endl;
-        cout << "| 1.- MODIFICAR DATOS DE UN ALUMNO                    |" << endl;
-        cout << "| --------------------------------------------------- |" << endl;
-        cout << "| 2.- ELIMINAR ASIGNACION DE ALUMNO A UNA MATERIA     |" << endl;
-        cout << "| --------------------------------------------------- |" << endl;
-        cout << "| 0.- SALIR                                           |" << endl;
-        cout << "| --------------------------------------------------- |" << endl;
-        cout << "|                                                     |" << endl;
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cin>>op;
-        cin.ignore();
-        system("clear");
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| 1.- MODIFICAR DATOS DE UN ALUMNO                     |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| 2.- ELIMINAR ASIGNACION DE ALUMNO A UNA MATERIA      |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| 0.- SALIR                                            |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " "<< cin.getline(op,1000);
+        bool v=validarEntero(op);
+        while(!v){
+            cout << setw(45) << left << " "<<"Opcion no valida!!! - Ingrese la opcion como entero sin ingresar otro valor no deseado "<<endl;
+            cout << setw(45) << left << " "<<cin.getline(op,1000);
+            v=validarEntero(op);
+        }
+        int op2=atoi(op);
+        void cls();
 
-        switch (op)
+        switch (op2)
         {
         case 1:
             {
@@ -764,8 +1003,8 @@ void subMenuModificaicones(){
 
         default:
             {
-                cout << "OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
-                cout << "En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
+                cout << setw(45) << left << " "<<"OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
+                cout << setw(45) << left << " "<<"En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
             }
             break;
         }      
@@ -774,27 +1013,38 @@ void subMenuModificaicones(){
 
 void subMenuAsignacion(){
     bool salir=false;
-    int op;
+    char op[1000];
 
     while (!salir)
     {
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cout << "|                                                     |" << endl;
-        cout << "| 1.- ASIGNACION DE ALUMNO A MATERIA                  |" << endl;
-        cout << "| --------------------------------------------------- |" << endl;
-        cout << "| 2.- LISTAR ASIGNACION DE ALUMNO A MATERIAS          |" << endl;
-        cout << "| --------------------------------------------------- |" << endl;
-        cout << "| 0.- SALIR                                           |" << endl;
-        cout << "| --------------------------------------------------- |" << endl;
-        cout << "|                                                     |" << endl;
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-        cin>>op;
-        cin.ignore();
-        system("clear");
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| 1.- ASIGNACION DE ALUMNO A MATERIA                   |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| 2.- LISTAR ASIGNACION DE ALUMNO A MATERIAS           |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "| 0.- SALIR                                            |" << endl;
+        cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+        cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+        cout << setw(45) << left << " "<< cin.getline(op,1000);
+        bool v=validarEntero(op);
+        while(!v){
+            cout << setw(45) << left << " "<< "Opcion no valida!!! - Ingrese la opcion como entero sin ingresar otro valor no deseado "<<endl;
+            cout << setw(45) << left << " "<< cin.getline(op,1000);
+            v=validarEntero(op);
+        }
 
-        switch (op)
+        int op2=atoi(op);
+
+        void cls();
+
+        switch (op2)
         {
         case 1:
             {
@@ -807,6 +1057,7 @@ void subMenuAsignacion(){
             {
                 leerAsigMat();
                 cin.ignore(); 
+                void cls();
             }
             break;
 
@@ -818,8 +1069,8 @@ void subMenuAsignacion(){
 
         default:
             {
-                cout << "OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
-                cout << "En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
+                cout << setw(45) << left << " "<<  "OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
+                cout << setw(45) << left << " "<<  "En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
             }
             break;
         }
@@ -828,32 +1079,43 @@ void subMenuAsignacion(){
 
 void menu(){
     bool salir = false;
-    int op;
+    char op[1000];
     
     while (!salir)
     {
-    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-    cout << "|                                                     |" << endl;
-    cout << "| 1.- MATERIAS                                        |" << endl;
-    cout << "| --------------------------------------------------- |" << endl;
-    cout << "| 2.- ALUMNOS                                         |" << endl;
-    cout << "| --------------------------------------------------- |" << endl;
-    cout << "| 3.- ASIGNACION DE ALUMNO A MATERIA                  |" << endl;
-    cout << "| --------------------------------------------------- |" << endl;
-    cout << "| 4.- MODIFICACION DE CAMPOS                          |" << endl;
-    cout << "| --------------------------------------------------- |" << endl;
-    cout << "| 0.- SALIR                                           |" << endl;
-    cout << "|                                                     |" << endl;    
-    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-    cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
-    cin>>op;
-
+    cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+    cout << setw(45) << left << " "<< "| 1.- MATERIAS                                         |" << endl;
+    cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+    cout << setw(45) << left << " "<< "| 2.- ALUMNOS                                          |" << endl;
+    cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+    cout << setw(45) << left << " "<< "| 3.- ASIGNACION DE ALUMNO A MATERIA                   |" << endl;
+    cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+    cout << setw(45) << left << " "<< "| 4.- MODIFICACION DE CAMPOS                           |" << endl;
+    cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+    cout << setw(45) << left << " "<< "| 0.- SALIR                                            |" << endl;
+    cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+    cout << setw(45) << left << " "<<cin.getline(op,1000);
+    bool v=validarEntero(op);
+    while(!v){
+        cout << setw(45) << left << " "<<"Opcion no valida!!! - Ingrese la opcion como entero sin ingresar otro valor no deseado "<<endl;
+        cin.getline(op,1000);
+        v=validarEntero(op);
+    }
+    int op2=atoi(op);
+    
     cin.ignore();
     system("clear");
 
-    switch (op){
-    case 1:{   
+    switch (op2){
+    case 1:{ 
             subMenuMaterias();
             cin.ignore();
         }
@@ -883,14 +1145,28 @@ void menu(){
             break;
 
     default:{
-                cout << "OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
-                cout << "En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
+                cout << setw(45) << left << " "<<"OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
+                cout << setw(45) << left << " "<<"En caso de necesitar ayuda para elegir la opcion correcta por favor validar 9.- AYUDA" << endl;
             }
             break;
         }
-        }
     }
+}
 
 void saludos(){
-    cout << setw(50) << right << "GRACIAS POR USAR ESTE PROGRAMA"<<endl;
+    cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(40) << right << "GRACIAS POR USAR ESTE PROGRAMA"<< setw(15) << right <<"|" <<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(40) << right << "DESARROLLADO POR CLAUDIO ACOSTA"<< setw(15) << right <<"|" <<endl;
+    cout << setw(45) << left << " "<< "|" << setw(30) << right << "LEGAJO: 22728"<< setw(25) << right <<"|" <<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
+    cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
+
 }

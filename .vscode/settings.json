@@ -6,6 +6,8 @@
         "iostream": "cpp",
         "terminal.external.osxExec": "iTerm.app",
         "ostream": "cpp",
-        "cstring": "cpp"
+        "cstring": "cpp",
+        "iomanip": "cpp",
+        "ios": "cpp"
     }
 }
