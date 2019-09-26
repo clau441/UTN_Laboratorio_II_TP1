@@ -1047,7 +1047,7 @@ void darBajaAlumMat(){
 
         while(!v){
             cout << setw(45) << left << " "<<  "OPCION NO VALIDA!!! POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
-            cout << setw(45) << left << " "<<cin.getline(op,1000);
+            cout << setw(45) << left << " ";cin.getline(op,1000);
             v=validarEntero(op);
         }
         int op2=atoi(op);
@@ -1429,7 +1429,7 @@ void menu(){
     cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
     cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
     cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
-    cout << setw(45) << left << " "<<cin.getline(op,1000);
+    cout << setw(45) << left << " ";cin.getline(op,1000);
     bool v=validarEntero(op);
     while(!v){
         cout << setw(45) << left << " "<<  "OPCION NO VALIDA!!! POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
