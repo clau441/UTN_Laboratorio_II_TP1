@@ -197,16 +197,17 @@ void altaMateria(tMateria *mat){
     cout << setw(45) << left << " "<< "INGRESE EL NOMBRE DEL PROFESOR A CARGO DE LA MATERIA" << endl;
     cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
     cout << endl;
-    cout << setw(45) << left << " "<< cin.getline(mat->profesorM,50);
+    cout << setw(45) << left << " "; cin.getline(mat->profesorM,50);
 
     bool vp=validarChar(mat->profesorM);
     while (!vp)
     {
         cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
         cout << setw(45) << left << " "<< " HA INGRESADO UN CARACTER NO VALIDO"<< endl;
-        cout << setw(45) << left << " "<< " INGRESE EL NOMBRE DEl PROFESOR A CARGO DE LA MATERIA" << setw(20) <<right <<"|" << endl;
+        cout << setw(45) << left << " "<< " INGRESE EL NOMBRE DEl PROFESOR A CARGO DE LA MATERIA" << endl;
         cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
-        cout << setw(45) << left << " "; cin.getline(mat->profesorM,50);
+        cout << setw(45) << left << " "; 
+        cin.getline(mat->profesorM,50);
 
         vp=validarChar(mat->profesorM);
     }
@@ -523,7 +524,7 @@ void altaAsigMat(){
     cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
     cout << setw(45) << left << " "<< "| INGRESE EL LEGAJO DEL ALUMNO A DAR DE ALTA           |" << endl;
     cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
-    cout << setw(45) << left << " "<< "  LEGAJO : " << cin.getline(legajochar,1000);
+    cout << setw(45) << left << " "<< "  LEGAJO : " ; cin.getline(legajochar,1000);
     bool e=validarEntero(legajochar);
 
     while (!e ){
@@ -552,7 +553,7 @@ void altaAsigMat(){
         cout << setw(45) << left << " "<< "¿ES EL ALUMNO QUE DESEA DAR DE ALTA EN MATERIA?"<<endl;
         cout << setw(45) << left << " "<< " 1 (SI) O 2 (NO) " <<endl;
         cout << setw(45) << left << " "; 
-        cout << setw(45) << left << " "<< cin.getline(op,1000);
+        cout << setw(45) << left << " "; cin.getline(op,1000);
         bool v=validarEntero(op);
         while(!v){
             cout << setw(45) << left << " "<< "OPCION NO VALIDA!!! - INGRESE LA OPCION CORRECTA 1 (SI) O 2 (NO) "<<endl;
@@ -676,7 +677,7 @@ bool modificarFechAlum(int legajo){
                 cout << setw(45) << left << " " << " IMPORTANTE=tiene que ser numerico entre 1 y 31"<< endl;
                 cout << setw(45) << left << " " << "--------------------------------------------------------" <<endl;
 
-                cout << setw(45) << left << " " << cin.getline(diachar,1000);
+                cout << setw(45) << left << " " ; cin.getline(diachar,1000);
 
                 bool v=validarEntero(diachar) , dr=validarDiaRango(diachar);
 
@@ -882,7 +883,7 @@ void subMenuModificarAlumno(){
     cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
     cout << setw(45) << left << " "<< "| INGRESE EL LEGAJO DEL ALUMNO A MODIFICAR SUS DATOS   |" << endl;
     cout << setw(45) << left << " "<< "| ---------------------------------------------------- |" << endl;
-    cout << setw(45) << left << " "<< "  LEGAJO : " << cin.getline(legajochar,1000);
+    cout << setw(45) << left << " "<< "  LEGAJO : " ; cin.getline(legajochar,1000);
 
     // bool v=validarChar(legajochar);
     bool e=validarEntero(legajochar);
@@ -1296,7 +1297,7 @@ void subMenuModificaicones(){
         cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
         cout << setw(45) << left << " "<< "|" << setw(55) << right << "|"<<endl;
         cout << setw(45) << left << " "<< "--------------------------------------------------------" <<endl;
-        cout << setw(45) << left << " "<< cin.getline(op,1000);
+        cout << setw(45) << left << " "; cin.getline(op,1000);
         bool v=validarEntero(op);
         while(!v){
             cout << setw(45) << left << " "<<"OPCION NO VALIDA!!!. POR FAVOR INGRESE LA OPCION CORRECTA." << endl;
